@@ -11,19 +11,45 @@ function addOperator(operator)
     {
         currentOperation += operator;
     }
-    else
+    else if(currentOperation != "")
     {
         currentOperation = currentOperation.slice(0, -1) + operator;
     }
-    document.getElementById("result").textContent = currentOperation;
+    if(currentOperation != "")
+    {
+        updateDisplay(currentOperation);
+    }
+}
+
+function updateDisplay(text)
+{
+    let el = document.getElementById("result");
+    el.textContent = text;
+    el.style.fontSize = text.length > 9 ? "40px" : "100px";
 }
 
 function compute()
 {
-    finalResult = eval(currentOperation);
-    document.getElementById("result").textContent = finalResult;
-    finalResult = 0;
-    currentOperation = "";
+    if(currentOperation != "")
+    {
+        try
+        {
+            finalResult = eval(currentOperation);
+            updateDisplay(String(finalResult));
+            finalResult = 0;
+            currentOperation = "";
+        }
+        catch(SyntaxError)
+        {
+            console.log("Invalid Operation.");
+        }
+    }
+    else
+    {
+        document.getElementById("result").textContent = 0;
+    }
+    
+    
 }
 
 document.getElementById("add").addEventListener("click", () => addOperator("+"));
