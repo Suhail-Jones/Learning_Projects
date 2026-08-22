@@ -74,4 +74,5 @@
     position: absolute;
     top: 273px;
     left: 460px;
+    pointer-events: none;
 }
