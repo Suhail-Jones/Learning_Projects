@@ -11,7 +11,7 @@ function App() {
   const handleClick = (value) => 
   {
       let lastOperation = currentOperation[currentOperation.length-1];
-      if(((currentOperation.length < 22) && value != "clear" && value != "." && value != "=") && (!isNaN(lastOperation) || !isNaN(value)))
+      if(((currentOperation.length < 22) && value != "clear" && value != "." && value != "=") && (!isNaN(lastOperation) || !isNaN(value) || (currentOperation == "" && value == "-")))
       {
         setIsTyping(true);
         setCurrentOperation(currentOperation + value);
@@ -26,17 +26,39 @@ function App() {
         setIsTyping(true);
         setCurrentOperation("");
       }
-      else if((currentOperation.length < 22) && value == "." && !currentOperation.includes("."))
+      else if((currentOperation.length < 22) && value == ".")
       {
-        setIsTyping(true);
-        setCurrentOperation(currentOperation + value);
+        let operations = ["+", "-", "/", "*"];
+
+        // Get the last index of each operation
+        let indices = operations.map(str => currentOperation.lastIndexOf(str));
+
+        // Get the latest index of all the indices
+        let lastIndex = Math.max(...indices);
+
+        let lastSegment = currentOperation.slice(lastIndex + 1);
+
+        if(!lastSegment.includes("."))
+        {
+          setIsTyping(true);
+          setCurrentOperation(currentOperation + value);
+        }        
       }
       else if(value == "=")
       {
         setIsTyping(false);
         if(!isNaN(lastOperation) || lastOperation == ".")
         {
-          setFinalResult(new Function(`return ${currentOperation}`)());
+          try
+          {
+            let raw = new Function(`return ${currentOperation}`)();
+            setFinalResult(Number(raw.toFixed(4)));
+          }
+          catch
+          {
+            setFinalResult("Invalid Calculation");
+          }
+          
         }
         else
         {
