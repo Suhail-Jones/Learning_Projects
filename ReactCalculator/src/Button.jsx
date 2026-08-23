@@ -1,8 +1,6 @@
-function Button(props){
-    const handleClick = (value) => console.log(value);
-    
+function Button(props){  
     return(
-        <button className="buttons" onClick={() => handleClick(props.buttonName)}>{props.buttonDisplay}</button>
+        <button className={`buttons ${props.extraClass || ""}`} onClick={() => props.onPress(props.buttonName)}>{props.buttonDisplay}</button>
     );
 }
 export default Button;
